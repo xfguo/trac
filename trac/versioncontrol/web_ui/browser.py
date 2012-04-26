@@ -447,10 +447,15 @@ class BrowserModule(Component):
         patterns = self.downloadable_paths
         if node.path and patterns and \
                filter(None, [fnmatchcase(node.path, p) for p in patterns]):
-            zip_href = req.href.changeset(rev or repos.youngest_rev, node.path,
-                                          old=rev, old_path='/', format='zip')
-            add_link(req, 'alternate', zip_href, _('Zip Archive'),
-                     'application/zip', 'zip')
+            if self.config['trac'].get('repository_type') == 'git':
+	        zip_href = req.href.snapshot(rev = rev or repos.youngest_rev, path = node.path)
+                add_link(req, 'alternate', zip_href, _('Zip Snapshot'),
+                         'application/zip', 'zip')
+            else:
+                zip_href = req.href.changeset(rev or repos.youngest_rev, node.path,
+                                              old=rev, old_path='/', format='zip')
+                add_link(req, 'alternate', zip_href, _('Zip Archive'),
+                         'application/zip', 'zip')
 
         add_script(req, 'common/js/expand_dir.js')
         add_script(req, 'common/js/keyboard_nav.js')
