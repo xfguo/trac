@@ -599,7 +599,7 @@ class BrowserModule(Component):
         path = node.path.strip('/')
         if repos.reponame:
             path = repos.reponame + '/' + path
-        if any(fnmatchcase(path, p.strip('/'))
+        if any(fnmatchcase(path.strip('/'), p.strip('/'))
                for p in self.downloadable_paths):
             zip_href = req.href.changeset(rev or repos.youngest_rev, 
                                           repos.reponame or None, node.path,
