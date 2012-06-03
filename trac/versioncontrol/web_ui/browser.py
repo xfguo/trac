@@ -606,7 +606,14 @@ class BrowserModule(Component):
                                           old=rev,
                                           old_path=repos.reponame or '/',
                                           format='zip')
-            add_link(req, 'alternate', zip_href, _('Zip Archive'),
+            add_link(req, 'alternate', zip_href, _('Zip Changeset Archive'),
+                     'application/zip', 'zip')
+
+            zip_href = req.href.snapshot(rev = rev or repos.youngest_rev, 
+	                                 path = node.path,
+					 repo = repos.reponame or None
+					 )
+            add_link(req, 'alternate', zip_href, _('Zip Snapshot Archive'),
                      'application/zip', 'zip')
 
         return {'entries': entries, 'changes': changes,
